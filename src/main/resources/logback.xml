@@ -191,10 +191,10 @@
 	<!--避免第三方日志刷屏-->
 	<logger name="org.restlet" level="WARN"/>
 
-	<logger name="com.fit2cloud.demo.dao" level="${log.level.sql}">
+	<logger name="com.fit2cloud.config.dao" level="${log.level.sql}">
 		<appender-ref ref="${log.out}"/>
 	</logger>
-	<logger name="com.fit2cloud.demo.Application" level="${logger.level:INFO}">
+	<logger name="com.fit2cloud.config.Application" level="${logger.level:INFO}">
 		<appender-ref ref="infoAsyncAppender"/>
 	</logger>
 	<logger name="com.fit2cloud.commons.server.base.mapper" level="${log.level.sql}">
