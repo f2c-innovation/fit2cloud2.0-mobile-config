@@ -118,12 +118,29 @@
 		</encoder>
 	</appender>
 
+	<appender name="pluginAppender"
+			  class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>DEBUG</level>
+		</filter>
+		<File>${logging.path}/plugin.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${logging.path}/history/plugin.%d{yyyyMMdd}.log
+			</FileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<Pattern>%d %-5level - %msg%n</Pattern>
+		</encoder>
+	</appender>
+
 	<appender name="consoleAsyncAppender" class="ch.qos.logback.classic.AsyncAppender">
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
 			<level>DEBUG</level>
 		</filter>
 		<queueSize>10000</queueSize>
-		<appender-ref ref="console"/>
+		<appender-ref ref="console" />
 	</appender>
 
 	<appender name="debugAsyncAppender" class="ch.qos.logback.classic.AsyncAppender">
@@ -131,7 +148,7 @@
 			<level>DEBUG</level>
 		</filter>
 		<queueSize>10000</queueSize>
-		<appender-ref ref="debugAppender"/>
+		<appender-ref ref="debugAppender" />
 	</appender>
 
 	<appender name="infoAsyncAppender" class="ch.qos.logback.classic.AsyncAppender">
@@ -139,7 +156,7 @@
 			<level>INFO</level>
 		</filter>
 		<queueSize>10000</queueSize>
-		<appender-ref ref="infoAppender"/>
+		<appender-ref ref="infoAppender" />
 	</appender>
 
 	<appender name="errorAsyncAppender" class="ch.qos.logback.classic.AsyncAppender">
@@ -148,7 +165,7 @@
 		</filter>
 		<queueSize>10000</queueSize>
 		<includeCallerData>true</includeCallerData>
-		<appender-ref ref="errorAppender"/>
+		<appender-ref ref="errorAppender" />
 	</appender>
 
 	<appender name="warnAsyncAppender" class="ch.qos.logback.classic.AsyncAppender">
@@ -157,7 +174,7 @@
 		</filter>
 		<queueSize>10000</queueSize>
 		<includeCallerData>true</includeCallerData>
-		<appender-ref ref="warnAppender"/>
+		<appender-ref ref="warnAppender" />
 	</appender>
 
 	<appender name="loginAsyncAppender" class="ch.qos.logback.classic.AsyncAppender">
@@ -166,18 +183,26 @@
 		</filter>
 		<queueSize>10000</queueSize>
 		<includeCallerData>true</includeCallerData>
-		<appender-ref ref="loginAppender"/>
+		<appender-ref ref="loginAppender" />
 	</appender>
 
+	<appender name="pluginAsyncAppender" class="ch.qos.logback.classic.AsyncAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>DEBUG</level>
+		</filter>
+		<queueSize>10000</queueSize>
+		<includeCallerData>true</includeCallerData>
+		<appender-ref ref="pluginAppender" />
+	</appender>
 
 	<root level="INFO">
-		<appender-ref ref="infoAsyncAppender"/>
-		<appender-ref ref="console"/>
+		<appender-ref ref="infoAsyncAppender" />
+		<appender-ref ref="console" />
 	</root>
 
 	<logger name="loginLogger" additivity="false">
-		<level value="INFO"/>
-		<appender-ref ref="loginAsyncAppender"/>
+		<level value="INFO" />
+		<appender-ref ref="loginAsyncAppender" />
 	</logger>
 
 	<logger name="com.fit2cloud" additivity="false">

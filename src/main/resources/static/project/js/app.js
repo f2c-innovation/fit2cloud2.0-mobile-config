@@ -431,7 +431,7 @@ ProjectApp.controller('WizardController', function ($scope, HttpUtils, Notificat
     }
 });
 
-ProjectApp.controller('TreeController', function ($scope) {
+ProjectApp.controller('TreeController', function ($scope, HttpUtils, Notification) {
     $scope.option = {
         select: "folder" //file, folder, all
     };
@@ -533,8 +533,18 @@ ProjectApp.controller('TreeController', function ($scope) {
     $scope.noroot = {};
 
     $scope.getSelected = function () {
-        console.log("带root", JSON.stringify($scope.root.getSelected(), 4));
-        console.log("不带root", JSON.stringify($scope.noroot.getSelected(), 4));
+       let userId = $scope.userId;
+       if (!!userId) {
+           HttpUtils.get('impersonateLogin/getUserkeysByuserId/' + userId, function (response) {
+               console.log(response.data)
+               $scope.item = response.data;
+           }, function (response) {
+               Notification.danger('\n' + 'Failed To Get Userkeys, Error: ' + response.message);
+           })
+       }else {
+           Notification.danger("userId 为空");
+       }
+
     }
 
 });
