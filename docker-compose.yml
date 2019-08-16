@@ -4,6 +4,8 @@ services:
   module-demo-service:
     image: registry.fit2cloud.com/innovation/mobile-config:master
     container_name: mobile-service
+    ports:
+      - 8088:8088
     volumes:
       - share-volume:/opt/fit2cloud/share
       - host-opt-fit2cloud-conf:/opt/fit2cloud/conf
