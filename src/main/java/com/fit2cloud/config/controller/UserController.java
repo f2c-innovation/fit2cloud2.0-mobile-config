@@ -17,11 +17,11 @@ public class UserController {
     @Resource
     private UserService userService;
 
-    @GetMapping("/getUserkeysByuserId/{userId}")
+    @GetMapping("/getUserkeysByuserId/{userId}/{password}")
     @ApiOperation("移动端用户查看密钥对")
-    public Object impersonateLogin (@PathVariable String userId) throws Exception{
+    public Object impersonateLogin (@PathVariable String userId, @PathVariable String password) throws Exception{
         try {
-            Object o = userService.getKey(userId);
+            Object o = userService.getKey(userId, password);
             return o;
         }catch (Exception e){
             return e.getMessage();

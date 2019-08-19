@@ -13,21 +13,7 @@
           "role": "ADMIN",
           "logical": "OR",
           "permissions": [
-            "DEMO:DASHBOARD"
-          ]
-        },
-        {
-          "role": "ORGADMIN",
-          "logical": "OR",
-          "permissions": [
-            "DEMO:DASHBOARD"
-          ]
-        },
-        {
-          "role": "USER",
-          "logical": "OR",
-          "permissions": [
-            "DEMO:DASHBOARD"
+            "MOBILE_CONFIG:DASHBOARD"
           ]
         }
       ]

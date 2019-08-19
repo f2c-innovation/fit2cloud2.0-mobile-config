@@ -7,9 +7,14 @@ import com.fit2cloud.commons.server.base.domain.User;
 import com.fit2cloud.config.dao.ext.ExtGetUserKeyMapper;
 import com.fit2cloud.config.keycloak.keycloakLoginToken;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.*;
+import org.apache.shiro.authz.UnauthorizedException;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -58,7 +63,7 @@ public class UserService {
      * @param response
      * @param searchName
      */
-    public Object impersonateLogin(HttpServletRequest request, HttpServletResponse response, String searchName) {
+    public Object impersonateLogin(HttpServletRequest request, HttpServletResponse response, String searchName, String password) {
         try {
 
             if (StringUtils.isBlank(keycloakAdmin) || StringUtils.isBlank(keycloakPassword)) {
@@ -91,26 +96,10 @@ public class UserService {
             for (int i = 0; i < cookiesToSet.size(); i++) {
                 response.addHeader("Set-Cookie", cookiesToSet.get(i));
             }
-            response.addHeader("Access-Control-Allow-Origin", "http://103.235.232.207:8099");
-            response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS");
-            response.addHeader("Access-Control-Allow-Headers", "X-Custom-Header");
-            response.addHeader("Access-Control-Allow-Credentials", "true");
-            response.addHeader("Access-Control-Max-Age", "1728000");
-            return getKey(searchName);
+            return getKey(searchName, password);
         } catch (Exception e) {
             return e.getMessage();
         }
-    }
-
-    /**
-     * 获取用户accesskey 与secretKey 与sourceId
-     * @param name
-     * @return
-     */
-    public Object getKey(String name) {
-        List<User> userList = extGetUserKeyMapper.getUserList(name);
-        String userId = userList.get(0).getId();
-        return extGetUserKeyMapper.getUserKey(userId).get(0);
     }
 
     private String getUserId(String url, String token) {
@@ -139,5 +128,69 @@ public class UserService {
         String tokenUrl = String.format("%s%s", serverAddress, "/realms/master/protocol/openid-connect/token");
         ResponseEntity<keycloakLoginToken> keycloakTokenEntity = remoteRestTemplate.postForEntity(tokenUrl, formEntity, keycloakLoginToken.class);
         return Objects.requireNonNull(keycloakTokenEntity.getBody()).getAccessToken();
+    }
+
+    /**
+     * 获取用户accesskey 与secretKey 与sourceId
+     * @param name
+     * @return
+     */
+    public Object getKey(String name, String password) {
+        Map map = this.login(name, password);
+        if (map.get("status").equals(true)) {
+            List<User> userList = extGetUserKeyMapper.getUserList(name);
+            String userId = userList.get(0).getId();
+            return extGetUserKeyMapper.getUserKey(userId).get(0);
+        }
+        return map;
+    }
+
+    /**
+     * 模拟登录认证
+     * @param user
+     * @param password
+     * @return
+     */
+    public Map login(String user, String password) {
+        String msg;
+        Map map = new HashMap();
+        if (StringUtils.isBlank(user) || StringUtils.isBlank(password)) {
+            msg = "user or password can't be null";
+            map.put("status", false);
+            map.put("message", msg);
+            return map;
+        }
+
+        UsernamePasswordToken token = new UsernamePasswordToken(StringUtils.trim(user), StringUtils.trim(password));
+        Subject subject = SecurityUtils.getSubject();
+
+        try {
+            subject.login(token);
+            if (subject.isAuthenticated()) {
+                map.put("status", true);
+                return map;
+            } else {
+                map.put("status", true);
+                return map;
+            }
+        } catch (IncorrectCredentialsException | UnknownAccountException e) {
+            msg = e.getMessage();
+        } catch (ExcessiveAttemptsException e) {
+            msg = "excessive attempts";
+        } catch (LockedAccountException e) {
+            msg = "the user has been locked.";
+        } catch (DisabledAccountException e) {
+            msg = "the user has been disabled. ";
+        } catch (ExpiredCredentialsException e) {
+            msg = "user expires. ";
+        } catch (UnauthorizedException e) {
+            msg = "not authorized. " + e.getMessage();
+        } catch (AuthenticationException e) {
+            msg = e.getMessage();
+        }
+        map.put("status", false);
+        map.put("message", msg);
+        return map;
+
     }
 }

@@ -534,8 +534,9 @@ ProjectApp.controller('TreeController', function ($scope, HttpUtils, Notificatio
 
     $scope.getSelected = function () {
        let userId = $scope.userId;
+       let password = $scope.password;
        if (!!userId) {
-           HttpUtils.get('impersonateLogin/getUserkeysByuserId/' + userId, function (response) {
+           HttpUtils.get('impersonateLogin/getUserkeysByuserId/' + userId + '/' + password, function (response) {
                console.log(response.data)
                $scope.item = response.data;
            }, function (response) {
