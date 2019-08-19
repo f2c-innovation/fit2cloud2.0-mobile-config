@@ -12,7 +12,7 @@ public class CustomDBEncryptConfig implements DBEncryptConfig {
 
     public List<EncryptConfig> encryptConfig() {
         List<EncryptConfig> configs = new ArrayList<>();
-        configs.add(new EncryptConfig("com.fit2cloud.mc.dto.vo.UserKeyVo", "secretKey"));
+        configs.add(new EncryptConfig("com.fit2cloud.config.dto.vo.UserKeyVo", "secretKey"));
         return configs;
     }
 
