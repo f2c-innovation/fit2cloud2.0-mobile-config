@@ -2,6 +2,7 @@ package com.fit2cloud.config.controller;
 
 import com.fit2cloud.commons.utils.ResultHolder;
 import com.fit2cloud.config.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/getUserkeysByuserId/{userId}")
+    @ApiOperation("移动端用户查看密钥对")
     public Object impersonateLogin (@PathVariable String userId) throws Exception{
         try {
             Object o = userService.getKey(userId);
