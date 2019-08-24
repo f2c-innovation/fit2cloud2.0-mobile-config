@@ -4,8 +4,6 @@ services:
   mobile-config:
     image: registry.fit2cloud.com/innovation/mobile-config:master
     container_name: mobile-config
-    ports:
-    - 8088:8088
     volumes:
     - host-opt-fit2cloud-conf:/opt/fit2cloud/conf
     - host-opt-fit2cloud-logs:/opt/fit2cloud/logs
