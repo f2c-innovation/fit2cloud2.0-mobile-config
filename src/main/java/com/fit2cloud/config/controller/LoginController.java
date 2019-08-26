@@ -92,6 +92,6 @@ public class LoginController {
             response.setStatus(302);
         }
         model.addAttribute("timestamp", WebConstants.timestamp);
-        return "web-public/login";
+        return "fit2cloud-mobile/login";
     }
 }
