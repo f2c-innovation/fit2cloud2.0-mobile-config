@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping("impersonateLogin")
+@RequestMapping("anonymous/impersonateLogin")
 public class UserController {
 
     @Resource
