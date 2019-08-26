@@ -174,7 +174,7 @@ public class UserService {
                 return map;
             }
         } catch (IncorrectCredentialsException | UnknownAccountException e) {
-            msg = e.getMessage();
+            msg = "UnknownAccountException. " + e.getMessage();
         } catch (ExcessiveAttemptsException e) {
             msg = "excessive attempts";
         } catch (LockedAccountException e) {
@@ -186,7 +186,7 @@ public class UserService {
         } catch (UnauthorizedException e) {
             msg = "not authorized. " + e.getMessage();
         } catch (AuthenticationException e) {
-            msg = e.getMessage();
+            msg = "AuthenticationException. " + e.getMessage();
         }
         map.put("status", false);
         map.put("message", msg);
