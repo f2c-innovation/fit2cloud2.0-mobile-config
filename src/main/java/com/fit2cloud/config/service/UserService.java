@@ -91,7 +91,7 @@ public class UserService {
             map.put("status", true);
             return map;
         }catch (Exception e){
-            msg = e.getMessage() + " user name password error";
+            msg = e.getMessage() + ": username or password error";
         }
         map.put("status", false);
         map.put("message", msg);
