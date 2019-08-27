@@ -1,5 +1,6 @@
 package com.fit2cloud.config.controller;
 
+import com.fit2cloud.commons.server.base.domain.User;
 import com.fit2cloud.commons.utils.ResultHolder;
 import com.fit2cloud.config.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -17,11 +18,11 @@ public class UserController {
     @Resource
     private UserService userService;
 
-    @GetMapping("/getUserkeysByuserId/{userId}/{password}")
+    @PostMapping("/getUserkeysByuserId")
     @ApiOperation("移动端用户查看密钥对")
-    public Object impersonateLogin (@PathVariable String userId, @PathVariable String password) throws Exception{
+    public Object impersonateLogin (@RequestBody User user) throws Exception{
         try {
-            Object o = userService.getKey(userId, password);
+            Object o = userService.getKey(user.getId(), user.getPassword());
             return o;
         }catch (Exception e){
             return e.getMessage();
